@@ -1,0 +1,34 @@
+/*
+   This is the default test program. Make sure to test your parser
+   with additional Decaf programs.
+*/
+class Program {
+
+    int i,j;
+    real x;
+
+    /* Commented out for new, until parser can handle the code.
+    static int myFunc( int n ) {
+        n = n * 2.1E-3;
+        return n;
+    }
+
+    static void main() {
+       int n;
+
+       i = myFunc(3);
+       i++;
+
+       if ( i > 2 ) {
+          i = i % 2;
+       }
+       else {
+          i = 1;
+       }
+
+       for ( n=0 ; n<5; n++ ) {
+            myFunc( n );
+       }
+    }
+    */
+}

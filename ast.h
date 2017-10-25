@@ -19,6 +19,11 @@ public:
     virtual ~Node() = default;
 };
 
+inline std::string tostr( const Node* node ) {
+    return (node == nullptr ? "(null)" : node->str() );
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////
 
 class ExprNode : public Node { };
@@ -44,7 +49,7 @@ public:
     AndExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(&& ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(&& ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -58,7 +63,7 @@ public:
     OrExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(|| ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(|| ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -72,7 +77,7 @@ public:
     NotExprNode( ExprNode *rhs ) : rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(! ") + rhs_->str( ) + ')';
+        return std::string("(! ") + tostr(rhs_) + ')';
     }
 
 protected:
@@ -86,7 +91,8 @@ public:
     EqExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(== ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(== ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
+
     }
 
 protected:
@@ -100,7 +106,7 @@ public:
     NeqExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(!= ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(!= ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -114,7 +120,7 @@ public:
     LtExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(< ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(< ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -128,7 +134,7 @@ public:
     LteExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(<= ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(<= ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -142,7 +148,7 @@ public:
     GtExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(> ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(> ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -156,7 +162,7 @@ public:
     GteExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(>= ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(>= ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -170,7 +176,7 @@ public:
     MultiplyExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(* ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(* ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -183,7 +189,7 @@ public:
     DivideExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(/ ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(/ ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -197,7 +203,7 @@ public:
     ModulusExprNode( ExprNode *lhs, ExprNode *rhs ) : lhs_(lhs), rhs_(rhs) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(% ") + lhs_->str( ) + ' ' + rhs_->str( ) + ')';
+        return std::string("(% ") + tostr(lhs_) + ' ' + tostr(rhs_) + ')';
     }
 
 protected:
@@ -214,9 +220,9 @@ public:
     virtual const std::string str( ) const override {
         std::string s = std::string("(+ ");
         if ( lhs_ != nullptr ) {
-            s += lhs_->str() + ' ';
+            s += tostr(lhs_) + ' ';
         }
-        s += rhs_->str() + ')';
+        s += tostr(rhs_) + ')';
         return s;
     }
 
@@ -235,9 +241,9 @@ public:
     virtual const std::string str( ) const override {
         std::string s = std::string("(- ");
         if ( lhs_ != nullptr ) {
-            s += lhs_->str() + ' ';
+            s += tostr(lhs_) + ' ';
         }
-        s += rhs_->str() + ')';
+        s += tostr(rhs_) + ')';
         return s;
     }
 
@@ -269,7 +275,7 @@ public:
     virtual const std::string str( ) const override {
         std::string s = std::string("(DECLARE ") + tostr(type_);
         for ( auto node : *vars_ ) {
-            s +=  ' ' + node->str( );
+            s +=  ' ' + tostr(node);
         }
         s += ')';
         return s;
@@ -287,7 +293,7 @@ public:
             : type_(type), var_(var) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(PARAM ") + tostr(type_) + var_->str() + ")";
+        return std::string("(PARAM ") + tostr(type_) + tostr(var_) + ")";
     }
 
 protected:
@@ -310,7 +316,7 @@ public:
     virtual const std::string str( ) const override {
         std::string s( "(CALL " + id_ );
         for ( auto e : *expr_list_ ) {
-            s += " " + e->str();
+            s += " " + tostr(e);
         }
         s += ')';
         return s;
@@ -331,7 +337,7 @@ public:
     }
 
     virtual const std::string str( ) const override {
-        return std::string("(= ") + lvar_->str( ) + ' ' + expr_->str( ) + ')';
+        return std::string("(= ") + tostr(lvar_) + ' ' + tostr(expr_) + ')';
     }
 
 protected:
@@ -350,7 +356,7 @@ public:
     IncrStmNode( VariableExprNode *var ) : var_(var) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(++ ") + var_->str( ) + ')';
+        return std::string("(++ ") + tostr(var_) + ')';
     }
 
 protected:
@@ -365,7 +371,7 @@ public:
     DecrStmNode( VariableExprNode *var ) : var_(var) {}
 
     virtual const std::string str( ) const override {
-        return std::string("(-- ") + var_->str( ) + ')';
+        return std::string("(-- ") + tostr(var_) + ')';
     }
 
 protected:
@@ -377,12 +383,21 @@ class ReturnStmNode: public StmNode
 {
 public:
 
+    ReturnStmNode( )
+            : expr_(nullptr) {
+    }
+
     ReturnStmNode( ExprNode *expr )
             : expr_(expr) {
     }
 
     virtual const std::string str( ) const override {
-        return std::string("(RET ") + expr_->str( ) + ')';
+        std::string s("(RET ");
+        if ( expr_ != nullptr ) {
+            s += tostr(expr_);
+        }
+        s += ')';
+        return s;
     }
 
 protected:
@@ -423,7 +438,7 @@ public:
     virtual const std::string str( ) const override {
         std::string s( "(BLOCK" );
         for ( auto stm : *stms_ ) {
-            s += " " + stm->str();
+            s += " " + tostr(stm);
         }
         s += ")";
         return s;
@@ -443,9 +458,9 @@ public:
 
     virtual const std::string str( ) const override {
         std::string s( "(IF " );
-        s += expr_->str() + stm_if_->str();
+        s += tostr(expr_) + tostr(stm_if_);
         if ( stm_else_ != nullptr ) {
-            s += stm_else_->str();
+            s += tostr(stm_else_);
         }
         s += ')';
         return s;
@@ -466,7 +481,7 @@ public:
             : assign_(assign), expr_(expr), inc_dec_(inc_dec), stms_(stms_) {}
 
     virtual const std::string str( ) const override {
-        return "(FOR " + assign_->str() + expr_->str() + inc_dec_->str() + stms_->str() + ')';
+        return "(FOR " + tostr(assign_) + tostr(expr_) + tostr(inc_dec_) + tostr(stms_) + ')';
     };
 
 protected:
@@ -490,13 +505,13 @@ public:
     virtual const std::string str( ) const override {
         std::string s = "(METHOD " + tostr(return_type_) + ' ' + id_ + ' ';
         for (auto p : *params_) {
-            s += p->str( );
+            s += tostr( p );
         }
         for (auto vds : *vars_decl_) {
-            s += vds->str( );
+            s += tostr( vds );
         }
         for (auto stm : *stms_) {
-            s += stm->str( );
+            s += tostr( stm );
         }
         s += ')';
         return s;
@@ -522,12 +537,12 @@ public:
         std::string s = "(CLASS " + id_;
         if ( var_decls_ != nullptr ) {
             for (auto v : *var_decls_) {
-                s += " " + v->str( );
+                s += " " + tostr( v );
             }
         }
         if ( method_decls_ != nullptr ) {
             for (auto m : *method_decls_) {
-                s += " " + m->str();
+                s += " " + tostr( m );
             }
         }
         s += ')';

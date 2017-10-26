@@ -29,3 +29,14 @@
 
 # Code::Blocks
 *.cbp
+
+#OUTPUT
+parser
+
+#FLEX OUTPUT
+FlexLexer.cpp
+
+#BISON OUTPUT
+*.hpp
+*.hh
+parser_decaf.cpp

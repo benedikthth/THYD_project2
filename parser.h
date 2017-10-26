@@ -5,6 +5,7 @@
 #include <string>
 #include "ast.h"
 #include "parser_decaf.hpp"
+#include <cstdio>
 using decaf = yy::parser_decaf;
 #define YY_DECL decaf::symbol_type yylex ()
 YY_DECL;

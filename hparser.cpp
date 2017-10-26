@@ -75,3 +75,60 @@ HParser::variable()
     match( decaf::token_type::Identifier );
     return node;
 }
+
+list<MethodNode*>*
+HParser::method_declarations()
+{
+    auto list_mdn = new list<MethodNode*>();
+    list_mdn->push_back(method_declaration());
+    while(token_.type == decaf::token_type::kwStatic) {
+        list_mdn->push_back(method_declaration());
+    }
+    return list_mdn;
+}
+
+MethodNode* HParser::method_declaration()
+{
+    if( token_.type == decaf::token_type::kwStatic) {
+        match(decaf::token_type::kwStatic);
+    }
+    ValueType return_type = this -> method_return_type();
+}
+
+ValueType HParser::method_return_type()
+{
+    ValueType valuetype = ValueType::VoidVal;
+    if ( token_.type == decaf::token_type::kwVoid) {
+        match( decaf::token_type::kwVoid);
+        valuetype = ValueType::VoidVal;
+    }
+    else {
+        valuetype = this -> type();
+    }
+    return valuetype;
+}
+
+list<ParameterNode*>*
+HParser::parameters()
+{
+    auto list_par = new list<ParameterNode*>();
+    if ( token_.type == decaf::token_type::kwInt ||
+        token_.type == decaf::token_type::kwReal ) {
+        parameter_list(list_par);
+    }
+    return list_par;
+}
+
+list<ParameterNode*>*
+HParser::parameter_list(list<ParameterNode*>* list_par)
+{
+    ValueType par_type = this->type();
+    list_par->push_back(new ParameterNode(par_type, new VariableExprNode(token_.lexeme)));
+    match(decaf::token_type::Identifier);
+    while(token_.type == decaf::token_type::ptComma) {
+        par_type = this->type();
+        list_par->push_back(new ParameterNode(par_type, new VariableExprNode(token_.lexeme)));
+        match(decaf::token_type::Identifier);
+    }
+    return list_par;
+}

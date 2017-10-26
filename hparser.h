@@ -121,5 +121,10 @@ private:
     std::list<VariableExprNode*>* variable_list();
     VariableExprNode* variable();
     ValueType type();
+    ValueType method_return_type();
+    std::list<MethodNode*>* method_declarations();
+    MethodNode* method_declaration();
+    std::list<ParameterNode*>* parameters();
+    std::list<ParameterNode*>* parameter_list(std::list<ParameterNode*>* list_par);
 };
 #endif //DECAFPARSER_HPARSER_H

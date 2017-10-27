@@ -126,5 +126,12 @@ private:
     MethodNode* method_declaration();
     std::list<ParameterNode*>* parameters();
     std::list<ParameterNode*>* parameter_list(std::list<ParameterNode*>* list_par);
+    std::list<StmNode*>* statement_list();
+    StmNode* statement();
+    IncrDecrStmNode* op_incr_decr(VariableExprNode* var);
+    ExprNode* expr();
+    std::list<ExprNode*>* expr_list();
+    BlockStmNode* statement_block();
+    BlockStmNode* optional_else();
 };
 #endif //DECAFPARSER_HPARSER_H

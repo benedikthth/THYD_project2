@@ -16,9 +16,10 @@ HParser::program() {
     match( decaf::token_type::Identifier );
     match( decaf::token_type::ptLBrace );
     auto list_vdn = variable_declarations();
+    auto list_mdn = method_declarations();
     match( decaf::token_type::ptRBrace );
     match( decaf::token_type::EOI );
-    return new ProgramNode(name, list_vdn, nullptr);
+    return new ProgramNode(name, list_vdn, list_mdn);
 }
 
 
@@ -89,10 +90,26 @@ HParser::method_declarations()
 
 MethodNode* HParser::method_declaration()
 {
-    if( token_.type == decaf::token_type::kwStatic) {
-        match(decaf::token_type::kwStatic);
-    }
-    ValueType return_type = this -> method_return_type();
+    match(decaf::token_type::kwStatic);
+    ValueType return_type = this->method_return_type();
+    string identifier = token_.lexeme;
+
+    match(decaf::token_type::Identifier);
+    match(decaf::token_type::ptLParen);
+
+    auto parameters = this->parameters();
+
+    match(decaf::token_type::ptRParen);
+    match(decaf::token_type::ptLBrace);
+
+    auto variable_declarations = this->variable_declarations();
+    match(decaf::token_type::ptRBrace);
+
+    return new MethodNode(return_type,
+                          identifier,
+                          parameters,
+                          variable_declarations,
+                          nullptr);
 }
 
 ValueType HParser::method_return_type()
@@ -126,6 +143,7 @@ HParser::parameter_list(list<ParameterNode*>* list_par)
     list_par->push_back(new ParameterNode(par_type, new VariableExprNode(token_.lexeme)));
     match(decaf::token_type::Identifier);
     while(token_.type == decaf::token_type::ptComma) {
+        match(decaf::token_type::ptComma);
         par_type = this->type();
         list_par->push_back(new ParameterNode(par_type, new VariableExprNode(token_.lexeme)));
         match(decaf::token_type::Identifier);

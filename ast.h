@@ -510,9 +510,9 @@ public:
         for (auto vds : *vars_decl_) {
             s += tostr( vds );
         }
-        for (auto stm : *stms_) {
-            s += tostr( stm );
-        }
+        //for (auto stm : *stms_) {
+         //  s += tostr( stm );
+       // }
         s += ')';
         return s;
     }

@@ -133,5 +133,6 @@ private:
     std::list<ExprNode*>* expr_list();
     BlockStmNode* statement_block();
     BlockStmNode* optional_else();
+    ExprNode* optional_expr();
 };
 #endif //DECAFPARSER_HPARSER_H

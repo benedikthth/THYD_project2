@@ -175,17 +175,23 @@ HParser::statement()
         match(decaf::token_type::Identifier);
         if(token_.type==decaf::token_type::ptLParen) {
             match(decaf::token_type::ptLParen);
-            return new MethodCallExprStmNode(identifier, expr_list());
+            auto params = expr_list();
+            match(decaf::token_type::ptSemicolon);
+            return new MethodCallExprStmNode(identifier, params);
         }
         else {
             auto var = new VariableExprNode(identifier);
             if(token_.type==decaf::token_type::OpAssign) {
                 match(decaf::token_type::OpAssign);
-                return new AssignStmNode(var, expr());
+                auto assignment = expr();
+                match(decaf::token_type::ptSemicolon);
+                return new AssignStmNode(var, assignment);
             }
             if (token_.type==decaf::token_type::OpArtInc
                 || token_.type==decaf::token_type::OpArtDec) {
-                return op_incr_decr(var);
+                auto incr_decr = op_incr_decr(var);
+                match(decaf::token_type::ptSemicolon);
+                return incr_decr;
             }
         }
     }
@@ -200,28 +206,38 @@ HParser::statement()
     }
     else if(token_.type == decaf::token_type::kwFor){
         match(decaf::token_type::kwFor);
-
         match(decaf::token_type::ptLParen);
-
         auto var = variable();
-
         match(decaf::token_type::OpAssign);
-
         auto assign_stm = new AssignStmNode(var, expr());
-
-        match(decaf::token_type::ptComma);
-
+        match(decaf::token_type::ptSemicolon);
         auto cond = expr();
-
-        match(decaf::token_type::ptComma);
-
+        match(decaf::token_type::ptSemicolon);
         auto inc_dec = op_incr_decr(variable());
-
         match(decaf::token_type::ptRParen);
-
         auto stm_block = statement_block();
-
         return new ForStmNode(assign_stm, cond, inc_dec, stm_block);
+    }
+    else if (token_.type == decaf::token_type::kwReturn){
+        match(decaf::token_type::kwReturn);
+        auto return_stm = new ReturnStmNode(optional_expr());
+        match(decaf::token_type::ptSemicolon);
+        return return_stm;
+    }
+    else if (token_.type == decaf::token_type::kwBreak) {
+        match(decaf::token_type::kwBreak);
+        auto break_stm = new BreakStmNode();
+        match(decaf::token_type::ptSemicolon);
+        return break_stm;
+    }
+    else if (token_.type == decaf::token_type::kwContinue) {
+        match(decaf::token_type::kwContinue);
+        auto cont_stm = new ContinueStmNode();
+        match(decaf::token_type::ptSemicolon);
+        return cont_stm;
+    }
+    else {
+        return statement_block();
     }
 }
 
@@ -240,6 +256,11 @@ IncrDecrStmNode* HParser::op_incr_decr(VariableExprNode* var)
 
 list<ExprNode*>*
 HParser::expr_list()
+{
+    return nullptr;
+}
+
+ExprNode* HParser::optional_expr()
 {
     return nullptr;
 }

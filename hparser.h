@@ -135,13 +135,19 @@ private:
     void more_expr(std::list<ExprNode*>* lst_expr);
     bool is_expr();
     ExprNode* expr();
-    /*
-    OrExprNode* expr_o();
+    ExprNode* expr_o();
     ExprNode* expr_and();
-    AndExprNode* expr_and_o();
+    ExprNode* expr_and_o();
     ExprNode* expr_eq();
-    EqExprNode* expr_eq_o();
-    */
+    ExprNode* expr_eq_o();
+    ExprNode* expr_rel();
+    ExprNode* expr_rel_o();
+    ExprNode* expr_add();
+    ExprNode* expr_add_o();
+    ExprNode* expr_mult();
+    ExprNode* expr_mult_o();
+    ExprNode* expr_unary();
+    ExprNode* expr_unary();
     ExprNode* op_eq(ExprNode* lhs);
     ExprNode* op_rel();
     ExprNode* op_add();

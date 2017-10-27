@@ -128,11 +128,25 @@ private:
     std::list<ParameterNode*>* parameter_list(std::list<ParameterNode*>* list_par);
     std::list<StmNode*>* statement_list();
     StmNode* statement();
-    IncrDecrStmNode* op_incr_decr(VariableExprNode* var);
-    ExprNode* expr();
     std::list<ExprNode*>* expr_list();
     BlockStmNode* statement_block();
     BlockStmNode* optional_else();
     ExprNode* optional_expr();
+    void more_expr(std::list<ExprNode*>* lst_expr);
+    bool is_expr();
+    ExprNode* expr();
+    /*
+    OrExprNode* expr_o();
+    ExprNode* expr_and();
+    AndExprNode* expr_and_o();
+    ExprNode* expr_eq();
+    EqExprNode* expr_eq_o();
+    */
+    ExprNode* op_eq(ExprNode* lhs);
+    ExprNode* op_rel();
+    ExprNode* op_add();
+    ExprNode* op_mul();
+    ExprNode* op_unary();
+    IncrDecrStmNode* op_incr_decr(VariableExprNode* var);
 };
 #endif //DECAFPARSER_HPARSER_H

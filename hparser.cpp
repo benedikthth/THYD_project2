@@ -257,17 +257,58 @@ IncrDecrStmNode* HParser::op_incr_decr(VariableExprNode* var)
 list<ExprNode*>*
 HParser::expr_list()
 {
-    return nullptr;
+    if(is_expr()) {
+        auto lst_expr = new list<ExprNode*>();
+        lst_expr->push_back(expr());
+        more_expr(lst_expr);
+        return lst_expr;
+    }
+    else {
+        return nullptr;
+    }
+}
+
+void HParser::more_expr(list<ExprNode*>* lst_expr)
+{
+    while(token_.type == decaf::token_type::ptComma) {
+        match(decaf::token_type::ptComma);
+        lst_expr->push_back(expr());
+    }
+}
+
+bool HParser::is_expr() {
+    if(token_.type == decaf::token_type::OpLogAnd
+       || token_.type == decaf::token_type::OpLogOr
+       || token_.type == decaf::token_type::OpLogNot
+       || token_.type == decaf::token_type::Number
+       || token_.type == decaf::token_type::ptLParen
+       || token_.type == decaf::token_type::Identifier
+       || token_.type == decaf::token_type::OpRelEQ
+       || token_.type == decaf::token_type::OpRelNEQ
+       || token_.type == decaf::token_type::OpRelLT
+       || token_.type == decaf::token_type::OpRelLTE
+       || token_.type == decaf::token_type::OpRelGT
+       || token_.type == decaf::token_type::OpRelGTE
+       || token_.type == decaf::token_type::OpArtPlus
+       || token_.type == decaf::token_type::OpArtMinus
+       || token_.type == decaf::token_type::OpArtMult
+       || token_.type == decaf::token_type::OpArtDiv
+       || token_.type == decaf::token_type::OpArtModulus){
+        return true;
+       }
+       else {
+        return false;
+       }
 }
 
 ExprNode* HParser::optional_expr()
 {
-    return nullptr;
-}
-
-ExprNode* HParser::expr()
-{
-    return nullptr;
+    if(is_expr()) {
+        return expr();
+    }
+    else {
+        return nullptr;
+    }
 }
 
 BlockStmNode* HParser::statement_block()
@@ -284,5 +325,25 @@ BlockStmNode* HParser::optional_else()
         match(decaf::token_type::kwElse);
         return statement_block();
     }
+    else {
+        return nullptr;
+    }
+}
+
+ExprNode* HParser::op_eq(ExprNode* lhs)
+{
+    if(token_.type == decaf::token::OpRelEQ) {
+        match(decaf::token::OpRelEQ);
+        return new EqExprNode(lhs, expr());
+    }
+    else {
+        match(decaf::token::OpRelNEQ);
+        return new NeqExprNode(lhs, expr());
+    }
+}
+
+ExprNode* HParser::expr()
+{
     return nullptr;
 }
+

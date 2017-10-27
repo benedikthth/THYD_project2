@@ -198,6 +198,31 @@ HParser::statement()
         auto opt_else = optional_else();
         return new IfStmNode(expression, stm_block, opt_else);
     }
+    else if(token_.type == decaf::token_type::kwFor){
+        match(decaf::token_type::kwFor);
+
+        match(decaf::token_type::ptLParen);
+
+        auto var = variable();
+
+        match(decaf::token_type::OpAssign);
+
+        auto assign_stm = new AssignStmNode(var, expr());
+
+        match(decaf::token_type::ptComma);
+
+        auto cond = expr();
+
+        match(decaf::token_type::ptComma);
+
+        auto inc_dec = op_incr_decr(variable());
+
+        match(decaf::token_type::ptRParen);
+
+        auto stm_block = statement_block();
+
+        return new ForStmNode(assign_stm, cond, inc_dec, stm_block);
+    }
 }
 
 IncrDecrStmNode* HParser::op_incr_decr(VariableExprNode* var)

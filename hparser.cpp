@@ -196,7 +196,7 @@ HParser::statement()
         match(decaf::token_type::ptRParen);
         auto stm_block = statement_block();
         auto opt_else = optional_else();
-        return new IfStmNode(expr(), stm_block, opt_else);
+        return new IfStmNode(expression, stm_block, opt_else);
     }
 }
 

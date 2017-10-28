@@ -11,7 +11,7 @@ BISOP = parser_decaf.cpp\
 all:
 		flex --outfile=$(FLEXOP) $(FLEXER)
 		bison -o $(BISOP) $(BISIN)
-		$(CC) $(CPPFLAGS) $(FILES) $(FLEXOP) $(BISOP) -o $(OUT)
+		$(CC) $(CPPFLAGS) $(FILES) $(FLEXOP) -o $(OUT)
 
 clean:
 		rm -f *.hh

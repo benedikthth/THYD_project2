@@ -171,12 +171,12 @@ statement_list: statement_list statement
 
 //????
 expression_list: expression more_expressions
-                 {$$ = $2; $$->push_back($1); }
+                 {$$ = $2; $$->push_front($1); }
                  | {$$ = new std::list<ExprNode *>(); }
 
 
 more_expressions: ptComma expression more_expressions
-                  {$$ = $3; $$->push_back($2); }
+                  {$$ = $3; $$->push_front($2); }
                   | {$$ = new std::list<ExprNode *>();  }
 
 

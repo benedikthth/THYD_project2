@@ -103,13 +103,15 @@ MethodNode* HParser::method_declaration()
     match(decaf::token_type::ptLBrace);
 
     auto variable_declarations = this->variable_declarations();
+    auto statements = this->statement_list();
+
     match(decaf::token_type::ptRBrace);
 
     return new MethodNode(return_type,
                           identifier,
                           parameters,
                           variable_declarations,
-                          nullptr);
+                          statements);
 }
 
 ValueType HParser::method_return_type()
@@ -473,8 +475,14 @@ ExprNode* HParser::op_add(ExprNode* lhs, ExprNode* rhs)
 
 ExprNode* HParser::expr_mult()
 {
-    auto lhs = expr_add();
-    return expr_mult_o(lhs);
+    if(token_.type == decaf::token_type::OpArtPlus
+    || token_.type == decaf::token_type::OpArtMinus) {
+        auto lhs = expr_add();
+        return expr_mult_o(lhs);
+    }
+    else {
+        return expr_mult_o(nullptr);
+    }
 }
 
 ExprNode* HParser::expr_mult_o(ExprNode* lhs)
@@ -487,7 +495,7 @@ ExprNode* HParser::expr_mult_o(ExprNode* lhs)
         return expr_mult_o(node);
     }
     else {
-        return lhs;
+        return expr_unary();
     }
 }
 
@@ -513,6 +521,7 @@ ExprNode* HParser::expr_unary()
     if(token_.type == decaf::token_type::OpArtPlus
     || token_.type == decaf::token_type::OpArtMinus
     || token_.type == decaf::token_type::OpLogNot) {
+        //TODO: Implement unary operators
     }
     else {
         return factor();
@@ -537,5 +546,25 @@ ExprNode* HParser::op_unary(ExprNode* rhs)
 
 ExprNode* HParser::factor()
 {
-
+    if(token_.type == decaf::token_type::Number) {
+        string number = token_.lexeme;
+        match(decaf::token_type::Number);
+        return new NumberExprNode(number);
+    }
+    else if(token_.type == decaf::token_type::ptLParen){
+        match(decaf::token_type::ptLParen);
+        auto node = expr();
+        match(decaf::token_type::ptRParen);
+        return node;
+    }
+    else if(token_.type == decaf::token_type::Identifier) {
+        string identifier = token_.lexeme;
+        match(decaf::token_type::Identifier);
+        if(token_.type == decaf::token_type::ptLParen) {
+            match(decaf::token_type::ptLParen);
+            auto lst_expr = expr_list();
+            match(decaf::token_type::ptRParen);
+            return new MethodCallExprStmNode(identifier, lst_expr);
+        }
+    }
 }

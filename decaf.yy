@@ -70,6 +70,36 @@ class Parser;
 %token <std::string> ErrUnknown
 
 
+
+%left OpLogOr
+
+
+%left OpLogAnd
+
+
+%left OpRelEQ
+%left OpRelNEQ
+
+
+%nonassoc OpRelGT
+%nonassoc OpRelGTE
+%nonassoc OpRelLT
+%nonassoc OpRelLTE
+
+
+%left OpArtPlus
+%left OpArtMinus
+
+
+%left OpArtModulus
+%left OpArtDiv
+%left OpArtMult
+
+
+%left OpLogNot
+
+
+
 %type <std::list<VariableDeclarationNode*>*> variable_declarations
 %type <ValueType> type
 %type <std::list<VariableExprNode*>*> variable_list
@@ -88,7 +118,6 @@ class Parser;
 %type <ExprNode *> optional_expression
 %type <IncrDecrStmNode *> incr_decr_var
 %type <std::list<ExprNode *>*> more_expressions
-
 %%
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -107,9 +136,6 @@ parameter_list: type Identifier
                 {$$ = new List<ParameterNode *>(); $$->push_back(new ParameterNode($1, $2) ); }
               | parameter_list ptComma type Identifier
                 {$$ = $1; $$->push_back($3, $4); }
-
-parameter:
-
 
 
 variable_declarations: variable_declarations type variable_list ptSemicolon
@@ -221,9 +247,9 @@ expression: expression OpLogOr expression
             {$$ = new DivideExprNode($1, $3); }
           | expression OpArtModulus expression
             {$$ = new ModulusExprNode($1, $3); }
-          | OpArtPlus expression
+          | OpArtPlus expression %prec OpLogNot
             {$$ = new PlusExprNode($2); }
-          | OpArtMinus expression
+          | OpArtMinus expression %prec OpLogNot
             {$$ = new MinusExprNode($2); }
           | OpLogNot expression
             {$$ = new NotExprNode($2); }
